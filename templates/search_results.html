@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Home | BidBash{% endblock %}
+{% load static %}
+{% block head %} <link rel="stylesheet" href="{% static 'styles.css' %}"> {% endblock head %}
+
+{% block body %}
+    <div class="search-results">
+        {% if results %}
+            {% for item in results %}
+                <a href="{% url 'item' item.id %}" class="product-div">
+                    <div class="product">
+                        <div class="product-details">
+                            <p class="product-name">{{ item.name }}</p>
+                            <p class="base-price"><b>Base Price : </b>${{ item.base_price }}</p>
+                            <a class="bid-now" href="{% url 'item' item.id %}">View</a>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        {% else %}
+            <p>No items found for the given query.</p>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Home | BidBash{% endblock %}
+{% load static %}
+{% block head %} <link rel="stylesheet" href="{% static 'styles.css' %}"> {% endblock head %}
+
+{% block body %}
+{% if user.is_authenticated %}
+
+<div class="product-container">
+    {% for item, img in item_image_pairs %}
+    <a href="{% url 'item' item.id %}" class="product-div">
+        <div class="product">
+            <img src="{{ img.image.url }}" alt="{{ item.name }}">
+            <div class="product-details">
+                <p class="product-name">{{ item.name }}</p>
+                <!-- Ensure that base_price is a field in the AuctionItem model -->
+                <p class="base-price">{{ item.base_price }}</p>
+                <a class="bid-now" href="{% url 'item' item.id %}">View</a>
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+
+{% else %}
+<script type="text/javascript">
+    window.location.href = "{% url 'login' %}";
+</script>
+</html>
+{% endif %}
+
+{% endblock body %}

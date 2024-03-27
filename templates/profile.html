@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+ <link rel="stylesheet" href="{% static 'styles.css' %}">
+
+{% static 'script.js' %} {% endblock head %}
+{% block title %}Profile | BidBash{% endblock %}
+
+{% block body %}
+<div class="profile-container">
+    <h3 style="font-size:xx-large; margin-bottom: 5%;">Your Profile :</h3>
+    <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Contact:</strong>{{user.contact_no}}</p>
+            <p><strong>First Name:</strong>{{user.first_name}}</p>
+            <p><strong>Last Name:</strong>{{user.last_name}}</p>
+    <div id="profile" class="tab-content">
+        <div class="profile-info">
+        </div>
+    </div>
+
+    <a href="{% url 'edit_profile' %}">Edit Profile</a>
+
+</div>
+<h2>Won Auctions</h2>
+<table style="border-collapse: collapse; width: 100%; border: 1px solid #ddd;">
+    <thead>
+        <tr>
+            <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Item Name</th>
+            <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Base Price</th>
+            <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Winning Bid</th>
+            <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">Seller's Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for auction in won_auctions %}
+        <tr style="border: 1px solid #ddd;">
+            <td style="border: 1px solid #ddd; padding: 8px;">{{ auction.item_name }}</td>
+            <td style="border: 1px solid #ddd; padding: 8px;">{{ auction.base_price }}</td>
+            <td style="border: 1px solid #ddd; padding: 8px;">{{ auction.winning_bid }}</td>
+            <td style="border: 1px solid #ddd; padding: 8px;">{{ auction.seller_email }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script src="{% static 'script.js' %}"></script>
+{% endblock %}

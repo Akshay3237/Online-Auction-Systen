@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Schedule Auction | BidBash{% endblock %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'styles.css' %}">
+{% endblock head %}
+
+{% block body %}
+    {% if user.is_authenticated %}
+                <div class="product-showcase">
+                    <div class="product-images" style="position: relative; overflow: hidden;">
+                        <div id="carousel" class="carousel" style="display: flex; transition: transform 10000s ease;">
+                            {% for image in images %}
+                            <div class="slide" style="flex: 0 0 auto; width: 100%;">
+                                <img src="{{ image.image.url }}" alt="Product Image" class="carousel-image" style="max-width: 350px; height: auto; max-height: 470px; border-radius: 20px; border: 2px solid black;">
+                            </div>
+                            {% endfor %}
+                            <button id="prevBtn" class="prev" onclick="moveSlide(-1)" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); background-color: transparent; color: black; border: none; cursor: pointer; font-size: 24px; z-index: 1;">❮</button>
+                            <button id="nextBtn" class="next" onclick="moveSlide(1)" style="position: absolute; top: 50%; right: 1330px; transform: translateY(-50%); background-color: transparent; color: black; border: none; cursor: pointer; font-size: 24px; z-index: 1;">❯</button>
+                        </div>
+                    </div>
+                      
+                    </div>
+                    <div class="product-details">
+                        <h2 class="product-name">{{ item.name }}</h2>
+                        <p class="description">{{ item.description }}</p>
+                        <p class="base-price">Base Price: ${{ item.base_price }}</p>
+                        <p class="highest-bid">Highest Bid: ${{ item.highest_bid }}</p>
+                        {% if current_time < item.start_time %}
+                            <p>Auction will start at : {{ item.start_time }}</p>
+                        {% else %}
+                            {% if current_time > item.end_time %}
+                                <p>Auction ended at : {{ item.end_time }}</p>
+                            {% else %}
+                                <div class="bid-form">
+                                    <form method="post" action="{% url 'handle_bid' auction_id=item.id %}">
+                                        {% csrf_token %}
+                                        <input type="number" name="bid_amount" placeholder="Enter your bid" required>
+                                        <button type="submit">Bid</button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                    </div>
+                </div>
+        {% endif %}
+    {% else %}
+        <script type="text/javascript">
+            window.location.href = "{% url 'login' %}";
+        </script>
+    {% endif %}
+    <script>
+        let currentSlide = 0;
+    
+        function moveSlide(direction) {
+            const slides = document.querySelectorAll('.slide');
+            const numSlides = slides.length;
+    
+            currentSlide += direction;
+    
+            if (currentSlide >= numSlides) {
+                currentSlide = 0;
+            } else if (currentSlide < 0) {
+                currentSlide = numSlides - 1;
+            }
+    
+            const carousel = document.querySelector('.carousel');
+            carousel.style.transform = 'translateX(-${currentSlide * 200}%)';
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,44 @@
+<!-- base.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BidBash{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <header>
+        <a href="{% url 'home' %}" style="text-decoration:none; color: antiquewhite;"><h1>BidBash.com</h1></a>
+        {% if user.is_authenticated %}
+        <h2>Welcome back {{ user.username }}!</h2>
+        {% endif %}
+        <div class="search-bar">
+            <form action="{% url 'search_products' %}" method="GET">
+                <input type="text" name="q" placeholder="Search...">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        <div class="menu">
+            <a class="menu-icon" href="{% url 'my_auctions' %}">My Auctions</a>
+            <a class="menu-icon" href="{% url 'auction_reports' %}">Auction Reports</a>
+            <a class="menu-icon" href="{% url 'bid_history' %}">Bid History</a>
+            <a class="menu-icon" href="{% url 'profile' %}">Profile</a>
+            <a class="menu-icon" href="{% url 'logout' %}">Logout</a>
+        </div>
+    </header>
+
+    <div class="content">
+        {% block body %}
+        {% endblock body %}
+    </div>
+
+    <footer>
+        <h3>For any queries contact: BidBash@info.in</h3>
+    </footer>
+
+    <script src="{% static 'script.js' %}"></script>
+</body>
+</html>

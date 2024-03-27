@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Auction Detail | BidBash
+{% endblock %}
+{% load static %}
+{% block head %} <link rel="stylesheet" href="{% static 'styles.css' %}"> {% endblock head %}
+
+{% block content %}
+    <div class="content">
+        <h2>Auction Detail</h2>
+        <p><strong>Name:</strong> {{ auction.name }}</p>
+        <p><strong>Description:</strong> {{ auction.description }}</p>
+        <p><strong>Category:</strong> {{ auction.category }}</p>
+        <p><strong>Seller:</strong> {{ auction.seller.username }}</p>
+        <p><strong>Base Price:</strong> {{ auction.base_price }}</p>
+        <p><strong>Start Time:</strong> {{ auction.start_time }}</p>
+        <p><strong>End Time:</strong> {{ auction.end_time }}</p>
+
+        <!-- You can include additional details or customize the layout as needed -->
+    </div>
+{% endblock %}

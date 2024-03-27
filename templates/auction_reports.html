@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Auction Reports | BidBash{% endblock %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'styles.css' %}">
+{% endblock head %}
+
+{% block body %}
+{% if user.is_authenticated %}
+<div class="auction-reports">
+    <h1>Auction Reports</h1>
+    <table style="border-collapse: collapse; width: 100%;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid #dddddd; padding: 8px;">Auction Name</th>
+                <th style="border: 1px solid #dddddd; padding: 8px;">Description</th>
+                <th style="border: 1px solid #dddddd; padding: 8px;">Base Price</th>
+                <th style="border: 1px solid #dddddd; padding: 8px;">Highest Bid</th>
+                <th style="border: 1px solid #dddddd; padding: 8px;">Highest Bidder</th>
+                <th style="border: 1px solid #dddddd; padding: 8px;">Highest Bidder Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for auction in completed_auctions %}
+            <tr style="background-color: #f2f2f2;">
+                <td style="border: 1px solid #dddddd; padding: 8px;">{{ auction.name }}</td>
+                <td style="border: 1px solid #dddddd; padding: 8px;">{{ auction.description }}</td>
+                <td style="border: 1px solid #dddddd; padding: 8px;">${{ auction.base_price }}</td>
+                <td style="border: 1px solid #dddddd; padding: 8px;">${{ auction.highest_bid }}</td>
+                <td style="border: 1px solid #dddddd; padding: 8px;">
+                    {% if auction.highest_bidder_username != request.user.username %}
+                        {{ auction.highest_bidder_username }}
+                    {% else %}
+                        None
+                    {% endif %}
+                </td>
+                <td style="border: 1px solid #dddddd; padding: 8px;">
+                    {% if auction.highest_bidder_email != request.user.email %}
+                        {{ auction.highest_bidder_email }}
+                    {% else %}
+                        None
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <p><b>Note</b> : If winner's information is displayed <b>"None"</b>, no appropriate bids were done during auction duration and product remains unslod.</p>
+    </table>
+</div>
+<footer>
+    <p>Contact us: oas@gmail.com</p>
+</footer>
+{% else %}
+<script type="text/javascript">
+    window.location.href = "{% url 'login' %}";
+</script>
+{% endif %}
+{% endblock %}
