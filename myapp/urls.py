@@ -20,6 +20,5 @@ urlpatterns = [
      path('see_more', views.see_more, name='see_more'),
      path('auction_reports', views.auction_reports, name='auction_reports'),
      path('search_products', views.search_products, name='search_products'),
-     path('<path:invalid_path>', RedirectView.as_view(url='/'), name='invalid_url_redirect'),
     # path('item',views.item),
 ]

@@ -17,15 +17,22 @@ from .forms import AuctionItemForm,ImageForm
 from .models import AuctionItem,Image,Bid
 from . import models
 from django.db.models import Q
+from django.shortcuts import render
+from django.db.models import Max
+from .models import AuctionItem, Bid
+from django.db.models import Max
 
 
 def home(request):
     username = request.user.username
 
     items = AuctionItem.objects.order_by('-id')[:5]
-    images = Image.objects.filter(item__in=items)
-    items_reversed = reversed(items)
-    item_image_pairs = zip(items_reversed, images)
+    item_image_pairs = []
+
+    for item in items:
+        image = Image.objects.filter(item=item).first()
+        item_image_pairs.append((item, image))
+        
     context = {
         'main_user': username,
         'item_image_pairs': item_image_pairs,
@@ -160,17 +167,16 @@ def bid_history(request):
 
 def see_more(request):
     items = AuctionItem.objects.all()
-    images = Image.objects.filter(item__in=items)
-    item_image_pairs = zip(items, images)
+    item_image_pairs = []
+
+    for item in items:
+        image = Image.objects.filter(item=item).first()
+        item_image_pairs.append((item, image))
+
     context = {
         'item_image_pairs': item_image_pairs,
     }
     return render(request, 'see_more.html', context)
-from django.shortcuts import render
-from django.db.models import Max
-from .models import AuctionItem, Bid
-
-from django.db.models import Max
 
 def auction_reports(request):
     # Retrieve all completed auctions for the current user
