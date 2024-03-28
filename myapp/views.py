@@ -196,7 +196,9 @@ def search_products(request):
         results = AuctionItem.objects.filter(
             Q(name__icontains=query) | Q(category__iexact=query)
         )
+        results_count = results.count()
         # Pass 'results' to the template for rendering
     else:
         results = None
-    return render(request, 'search_results.html', {'results': results})
+        results_count = 0
+    return render(request, 'search_results.html', {'results': results,'query':query,'results_count': results_count})
