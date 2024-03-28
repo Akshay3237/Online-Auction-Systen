@@ -23,6 +23,8 @@ from .models import AuctionItem, Bid
 from django.db.models import Max
 
 
+
+
 def home(request):
     username = request.user.username
 
@@ -49,22 +51,7 @@ from django.shortcuts import render
 from .models import Bid, AuctionItem
 
 def profile(request):
-    user = request.user
-    bids = Bid.objects.filter(bidder=user)
-    won_auctions = []
-    
-    for bid in bids:
-        auction = bid.auction
-        if bid.bid_amount == auction.highest_bid and auction.seller.email != user.email:
-            seller_email = auction.seller.email
-            won_auctions.append({
-                'item_name': auction.name,
-                'base_price': auction.base_price,
-                'winning_bid': bid.bid_amount,
-                'seller_email': seller_email
-            })
-    
-    return render(request, 'profile.html', {'won_auctions': won_auctions})
+    return render(request, 'profile.html')
 
 
 def edit_profile(request):
@@ -159,12 +146,29 @@ def bid_history(request):
     user = request.user
     bids = Bid.objects.filter(bidder=user)
     bid_history = []
+
     for bid in bids:
-        item_name = bid.auction.name
-        base_price = bid.auction.base_price
+        auction = bid.auction  # Define 'auction' variable here
+        item_name = auction.name
+        base_price = auction.base_price
         my_bid = bid.bid_amount
-        bid_history.append({'item_name': item_name, 'base_price': base_price, 'my_bid': my_bid})
+
+        # Get the highest bid for the auction
+        highest_bid = Bid.objects.filter(auction=auction).aggregate(Max('bid_amount'))['bid_amount__max']
+
+        # Determine status (WON or LOST)
+        status = "WON" if highest_bid == my_bid else "LOST"
+
+        bid_history.append({
+            'item_name': item_name,
+            'base_price': base_price,
+            'my_bid': my_bid,
+            'highest_bid': highest_bid,
+            'status': status,
+        })
+
     return render(request, 'bid_history.html', {'bid_history': bid_history})
+
 
 def see_more(request):
     items = AuctionItem.objects.all()

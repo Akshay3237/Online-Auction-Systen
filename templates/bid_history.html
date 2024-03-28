@@ -12,6 +12,8 @@
                     <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: left; background-color: #f2f2f2;">Item Name</th>
                     <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center; background-color: #f2f2f2;">Base Price</th>
                     <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center; background-color: #f2f2f2;">My Bid</th>
+                    <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center; background-color: #f2f2f2;">Highest Bid</th>
+                    <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center; background-color: #f2f2f2;">Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,6 +22,8 @@
                     <td style="padding: 10px; border-bottom: 1px solid #ddd;">{{ bid.item_name }}</td>
                     <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${{ bid.base_price }}</td>
                     <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${{ bid.my_bid }}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${{ bid.highest_bid }}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">{{ bid.status }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
