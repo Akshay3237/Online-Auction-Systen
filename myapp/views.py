@@ -107,7 +107,7 @@ def add_image(request, auction_id):
                     image.item = auction
                     image.save()
 
-            return HttpResponseRedirect(reverse('auction_detail', args=[auction_id]))
+            return HttpResponseRedirect(reverse('my_auctions'))
     else:
         formset = ImageFormSet(prefix='images')
 

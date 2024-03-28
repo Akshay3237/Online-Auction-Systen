@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from . import views
 from django.contrib.auth.decorators import login_required
+from django.views.generic import RedirectView
 
 urlpatterns = [
     # path('',views.home),
@@ -19,5 +20,6 @@ urlpatterns = [
      path('see_more', views.see_more, name='see_more'),
      path('auction_reports', views.auction_reports, name='auction_reports'),
      path('search_products', views.search_products, name='search_products'),
+     path('<path:invalid_path>', RedirectView.as_view(url='/'), name='invalid_url_redirect'),
     # path('item',views.item),
 ]

@@ -10,18 +10,19 @@
 <h2>My Auctions</h2>
 
 <!-- Button to create a new auction -->
-<a href="{% url 'create_auction' %}" class="btn btn-primary">Create New Auction</a>
+<a class="bid-now" href="{% url 'create_auction' %}" class="btn btn-primary">Create New Auction</a>
 
 <!-- Display user's auctions -->
 {% if user_auctions %}
     <ul>
         {% for auction in user_auctions %}
-            <li style="font-weight: bolder; font-size: x-large; list-style-type:lower-roman;">{{ auction.name }}</li>
-           <p> <b style="font-size: larger;">Description :</b> <br> <br>
-            {{ auction.description}}  <br> <br>
+            <a href="{% url 'item' auction.id %}" style="text-decoration: none;">
+                <li style="font-weight: bolder; font-size: x-large; list-style-type:decimal;">{{ auction.name }}</li>
+            </a>
+            <p><b style="font-size: larger;">Description :</b> {{ auction.description}}<br>
             <b>Base Price : </b> {{ auction.base_price }} <br>
-            <b>Start Time :</b>  {{ auction.start_time }} <br>
-           <b> End Time :</b>  {{ auction.end_time }} <br>
+            <b>Start Time : </b> {{ auction.start_time }} <br>
+            <b>End Time :</b>  {{ auction.end_time }} <br>
         </p>
             <br> <br> <br> 
             {% endfor %}
