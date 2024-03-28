@@ -10,7 +10,9 @@
 <div class="product-container">
     {% for item, img in item_image_pairs %}
     <a href="{% url 'item' item.id %}" class="product-div">
-        <div class="product">
+        <div class="product" style="position: relative;">
+            <div class="time-left-{{ item.id }}" style="position: absolute; top: 10px; left: 10px; color: white; background-color: #4CAF50; padding: 5px; border-radius: 8px; font-family: Arial, sans-serif; font-size: 14px;"></div>
+
             <img src="{{ img.image.url }}" alt="{{ item.name }}">
             <div class="product-details">
                 <p class="product-name">{{ item.name }}</p>
@@ -20,8 +22,37 @@
             </div>
         </div>
     </a>
+    <script>
+        var startTime_{{ item.id }} = new Date('{{ item.start_time|date:"Y-m-d H:i:s" }}').getTime();
+var endTime_{{ item.id }} = new Date('{{ item.end_time|date:"Y-m-d H:i:s" }}').getTime();
+var x_{{ item.id }} = setInterval(function() {
+    var now = new Date().getTime();
+
+    if (now < startTime_{{ item.id }}) {
+        document.querySelector('.time-left-{{ item.id }}').innerHTML = "Not Started Yet";
+        return;
+    }
+
+    var distance = endTime_{{ item.id }} - now;
+
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    if (distance < 0) {
+        clearInterval(x_{{ item.id }});
+        document.querySelector('.time-left-{{ item.id }}').innerHTML = "Ended";
+    } else {
+        document.querySelector('.time-left-{{ item.id }}').innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+    }
+}, 10); 
+
+    </script>
     {% endfor %}
 </div>
+
+
 
 {% else %}
 <script type="text/javascript">

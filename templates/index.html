@@ -28,7 +28,8 @@
 <div class="product-container">
     {% for item, img in item_image_pairs %}
     <a href="{% url 'item' item.id %}" class="product-div">
-        <div class="product">
+        <div class="product" style="position: relative;">
+            <div class="time-left{{ forloop.counter }}" style="position: absolute; top: 10px; left: 10px; color: white; background-color: #4CAF50; padding: 5px; border-radius: 10px; font-family: Arial, sans-serif; font-size: 14px;"></div>
             <img src="{{ img.image.url }}" alt="{{ item.name }}">
             <div class="product-details">
                 <p class="product-name">{{ item.name }}</p>
@@ -38,8 +39,37 @@
             </div>
         </div>
     </a>
+    <script>
+        var startTime{{ forloop.counter }} = new Date('{{ item.start_time|date:"Y-m-d H:i:s" }}').getTime();
+        var endTime{{ forloop.counter }} = new Date('{{ item.end_time|date:"Y-m-d H:i:s" }}').getTime();
+        var x{{ forloop.counter }} = setInterval(function() {
+            var now = new Date().getTime();
+            var distance = startTime{{ forloop.counter }} - now;
+            var timeLeftElement{{ forloop.counter }} = document.querySelector('.time-left{{ forloop.counter }}');
+            if (distance > 0) {
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                timeLeftElement{{ forloop.counter }}.innerHTML = "Not Started Yet";
+            } else {
+                var distance = endTime{{ forloop.counter }} - now;
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                timeLeftElement{{ forloop.counter }}.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+                if (distance < 0) {
+                    clearInterval(x{{ forloop.counter }});
+                    timeLeftElement{{ forloop.counter }}.innerHTML = "Expired";
+                }
+            }
+        }, 10);
+
+    </script>
     {% endfor %}
 </div>
+
 
 <a href="{% url 'see_more' %}" class="see-more-button">See More</a> 
 
