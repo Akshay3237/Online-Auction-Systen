@@ -8,18 +8,20 @@
     <div class="search-results">
         {% if results %}
         <p style="text-align:center;font-size: 30px">{{results_count}} results found for <b>"{{query}}""</b></p>
-            {% for item in results %}
-                <a href="{% url 'item' item.id %}" class="product-div">
-                    <div class="product">
-                        <div class="product-details">
+            <div class="product-container">
+                {% for item in results %}
+                    <a href="{% url 'item' item.id %}" class="product-div">
+                        <div class="product">
                             <img src="{{  item.image_set.first.image.url }}" alt="{{ item.name }}" class="product-image">
-                            <p class="product-name">{{ item.name }}</p>
-                            <p class="base-price"><b>Base Price : </b>${{ item.base_price }}</p>
-                            <a class="bid-now" href="{% url 'item' item.id %}">View</a>
+                            <div class="product-details">
+                                <p class="product-name">{{ item.name }}</p>
+                                <p class="base-price"><b>Base Price : </b>${{ item.base_price }}</p>
+                                <a class="bid-now" href="{% url 'item' item.id %}">View</a>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            {% endfor %}
+                    </a>
+                {% endfor %}
+            </div>
         {% else %}
             <p style="text-align:center;font-size: 30px">No items found for <b>"{{query}}"</b></p>
         {% endif %}

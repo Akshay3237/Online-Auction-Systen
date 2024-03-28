@@ -80,7 +80,8 @@ def edit_profile(request):
 
 def my_auctions(request):
     user = request.user
-    user_auctions = AuctionItem.objects.filter(seller=user)
+    current_time = timezone.now()
+    user_auctions = AuctionItem.objects.filter(seller=user, end_time__gt=current_time)
     context = {
         'user' : user,
         'user_auctions' : user_auctions,
