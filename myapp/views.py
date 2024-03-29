@@ -127,7 +127,14 @@ def bid_history(request):
         base_price = auction.base_price
         my_bid = bid.bid_amount
         highest_bid = Bid.objects.filter(auction=auction).aggregate(Max('bid_amount'))['bid_amount__max']
-        status = "WON" if highest_bid == my_bid else "LOST"
+        current_time = timezone.now()
+
+        if current_time < auction.end_time:
+            status = "Ongoing"
+        elif highest_bid == my_bid:
+            status = "Won"
+        else:
+            status = "Lost"
 
         bid_history.append({
             'item_name': item_name,
