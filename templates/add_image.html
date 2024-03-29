@@ -6,6 +6,7 @@
 {% endblock head %}
 
 {% block body %}
+{% if user.is_authenticated %}
 <div style="max-width: 400px; margin: 0 auto; text-align: center; border: 1px solid #ccc; padding: 20px; border-radius: 10px; margin-top: 20px;">
     <form method="post" enctype="multipart/form-data" style="margin-top: 20px;">
         {% csrf_token %}
@@ -19,4 +20,9 @@
         <button type="submit" style="margin-top: 10px;">Submit</button>
     </form>
 </div>
+{% else %}
+        <script type="text/javascript">
+            window.location.href = "{% url 'login' %}";
+        </script>
+    {% endif %}
 {% endblock %}

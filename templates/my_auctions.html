@@ -3,16 +3,14 @@
 {% block head %}
 <link rel="stylesheet" href="{% static 'styles.css' %}">
 {% static 'script.js' %} {% endblock head %}
-{% block title %}Profile | BidBash{% endblock %}
+{% block title %}My Auction | BidBash{% endblock %}
 
 {% block body %}
 <div id="my_auctions">
 <h2>My Auctions</h2>
 
-<!-- Button to create a new auction -->
 <a class="bid-now" href="{% url 'create_auction' %}" class="btn btn-primary">Create New Auction</a>
 
-<!-- Display user's auctions -->
 {% if user_auctions %}
     <ul>
         {% for auction in user_auctions %}

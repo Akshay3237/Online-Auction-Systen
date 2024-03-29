@@ -3,6 +3,7 @@
 {% block title %}Edit Profile | BidBash{% endblock %}
 
 {% block body %}
+{% if user.is_authenticated %}
 <div style="max-width: 400px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; text-align: center; position: relative;">
     <form method="post" action="{% url 'edit_profile' %}" style="width: 100%; margin-bottom: 20px;">
     <h1 style="font-size: 24px; margin-bottom: 20px;">Edit Profile
@@ -13,4 +14,9 @@
         {{ form.as_p }}
     </form>
 </div>
+{% else %}
+        <script type="text/javascript">
+            window.location.href = "{% url 'login' %}";
+        </script>
+{% endif %}
 {% endblock %}

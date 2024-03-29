@@ -1,28 +1,14 @@
-from django.shortcuts import render,redirect, get_object_or_404
-from django.http import HttpResponse,HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
-from .forms import EditProfileForm
-from .models import AuctionItem
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseRedirect
+from .forms import EditProfileForm, AuctionItemForm, ImageForm
+from .models import AuctionItem, Image, Bid
 from django.urls import reverse
 from django.utils import timezone
-from datetime import datetime
 from decimal import Decimal
-from .models import Image
 from django.db import transaction
-from django.shortcuts import redirect, get_object_or_404
 from django.contrib import messages
 from django.forms import formset_factory
-from .forms import EditProfileForm
-from .forms import AuctionItemForm,ImageForm
-from .models import AuctionItem,Image,Bid
-from . import models
-from django.db.models import Q
-from django.shortcuts import render
-from django.db.models import Max
-from .models import AuctionItem, Bid
-from django.db.models import Max
-
-
+from django.db.models import Q, Max
 
 
 def home(request):
@@ -44,11 +30,8 @@ def home(request):
 def item(request, item_id):
     item = get_object_or_404(AuctionItem, pk=item_id)
     images = Image.objects.filter(item=item)
-    current_time = timezone.now()  # Retrieve all images associated with the AuctionItem
+    current_time = timezone.now()
     return render(request, 'show.html', {'item': item, 'images': images, 'current_time': current_time})  # Pass images to the template
-
-from django.shortcuts import render
-from .models import Bid, AuctionItem
 
 def profile(request):
     return render(request, 'profile.html')
@@ -59,7 +42,7 @@ def edit_profile(request):
         form = EditProfileForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('profile')  # Redirect to the profile page after saving changes
+            return redirect('profile')
     else:
         form = EditProfileForm(instance=request.user)
     
@@ -75,15 +58,14 @@ def my_auctions(request):
     }
     return render(request, 'my_auctions.html', context)
 
-@login_required
 def create_auction(request):
     if request.method == 'POST':
         auction_form = AuctionItemForm(request.POST)
         if auction_form.is_valid():
             auction = auction_form.save(commit=False)
-            auction.seller = request.user  # Assign the seller
+            auction.seller = request.user
             auction.save()
-            return redirect('add_image', auction_id=auction.pk)  # Redirect to add_images page with auction ID
+            return redirect('add_image', auction_id=auction.pk)
     else:
         auction_form = AuctionItemForm()
     return render(request, 'create_auction.html', {'auction_form': auction_form})
@@ -108,20 +90,12 @@ def add_image(request, auction_id):
 
     return render(request, 'add_image.html', {'formset': formset})
 
-def auction_detail(request, pk):
-    auction = get_object_or_404(AuctionItem, pk=pk)
-    # You can perform any necessary logic here, such as fetching additional data
-    # or processing the auction item before rendering it in the template
-    return render(request, 'auction_detail.html', {'auction': auction})
-from django.utils import timezone
-
 def handle_bid(request, auction_id):
     if request.method == 'POST':
         auction = get_object_or_404(AuctionItem, pk=auction_id)
         bid_amount = request.POST.get('bid_amount')
         with transaction.atomic():
-            # Validate bid amount
-            if bid_amount:
+            if bid_amount:  
                 try:
                     bid_amount = Decimal(bid_amount)
                     if bid_amount >= auction.base_price:
@@ -129,7 +103,7 @@ def handle_bid(request, auction_id):
                             auction.highest_bid = bid_amount
                             auction.save()
                             Bid.objects.create(auction=auction, bidder=request.user, bid_amount=bid_amount)
-                            messages.success(request, 'Your bid has been placed successfully.')
+                            messages.success(request,'Your bid has been placed successfully.')
                         else:
                             messages.error(request, 'Bid amount must be higher than the current highest bid.')
                     else:
@@ -148,15 +122,11 @@ def bid_history(request):
     bid_history = []
 
     for bid in bids:
-        auction = bid.auction  # Define 'auction' variable here
+        auction = bid.auction 
         item_name = auction.name
         base_price = auction.base_price
         my_bid = bid.bid_amount
-
-        # Get the highest bid for the auction
         highest_bid = Bid.objects.filter(auction=auction).aggregate(Max('bid_amount'))['bid_amount__max']
-
-        # Determine status (WON or LOST)
         status = "WON" if highest_bid == my_bid else "LOST"
 
         bid_history.append({
@@ -184,12 +154,10 @@ def see_more(request):
     return render(request, 'see_more.html', context)
 
 def auction_reports(request):
-    # Retrieve all completed auctions for the current user
     completed_auctions = AuctionItem.objects.filter(
         seller=request.user, end_time__lt=timezone.now()
     )
 
-    # Fetch the highest bid and bidder for each completed auction item
     for auction in completed_auctions:
         highest_bid_tuple = Bid.objects.filter(auction=auction).aggregate(Max('bid_amount'))
         highest_bid_amount = highest_bid_tuple['bid_amount__max']
@@ -208,7 +176,6 @@ def search_products(request):
             Q(name__icontains=query) | Q(category__iexact=query)
         )
         results_count = results.count()
-        # Pass 'results' to the template for rendering
     else:
         results = None
         results_count = 0

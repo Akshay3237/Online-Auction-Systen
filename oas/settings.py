@@ -133,4 +133,4 @@ MEDIA_URL = '/images/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = '/accounts/profile/'  # Adjust this according to your application's URL structure
+LOGIN_REDIRECT_URL = '/accounts/profile/' 

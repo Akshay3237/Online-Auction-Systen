@@ -5,6 +5,7 @@
 {% block head %} <link rel="stylesheet" href="{% static 'styles.css' %}"> {% endblock head %}
 
 {% block body %}
+{% if user.is_authenticated %}
     <div class="search-results">
         {% if results %}
         <p style="text-align:center;font-size: 30px">{{results_count}} results found for <b>"{{query}}"</b></p>
@@ -26,4 +27,9 @@
             <p style="text-align:center;font-size: 30px">No items found for <b>"{{query}}"</b></p>
         {% endif %}
     </div>
+    {% else %}
+        <script type="text/javascript">
+            window.location.href = "{% url 'login' %}";
+        </script>
+    {% endif %}
 {% endblock %}

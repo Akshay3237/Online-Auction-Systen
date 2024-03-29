@@ -7,6 +7,7 @@
 {% block title %}Profile | BidBash{% endblock %}
 
 {% block body %}
+{% if user.is_authenticated %}
 <div class="profile-container">
     <h3 style="font-size:xx-large; margin-bottom: 5%;">Your Profile :</h3>
     <p><strong>Username:</strong> {{ user.username }}</p>
@@ -24,4 +25,9 @@
 </div>
 
 <script src="{% static 'script.js' %}"></script>
+{% else %}
+        <script type="text/javascript">
+            window.location.href = "{% url 'login' %}";
+        </script>
+    {% endif %}
 {% endblock %}
