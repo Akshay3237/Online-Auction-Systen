@@ -12,7 +12,7 @@
     <header>
         <a href="{% url 'home' %}" style="text-decoration:none; color: antiquewhite;"><h1>BidBash.com</h1></a>
         {% if user.is_authenticated %}
-        <h2>Welcome back {{ user.username }}!</h2>
+        <h2>Namaste {{ user.username }}!</h2>
         {% endif %}
         <div class="search-bar">
             <form action="{% url 'search_products' %}" method="GET">

@@ -15,7 +15,7 @@ header {
     /* White text color */
     border-radius: 0 0 10px 10px;
     /* Rounded corners only at the bottom */
-    padding: 20px;
+    padding: 10px 1px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -65,6 +65,7 @@ header {
 .menu-icon {
     text-decoration: none;
     margin-left: 20px;
+    margin-right: 20px;
     /* Increased margin */
     color: #fff;
     /* White text color */
