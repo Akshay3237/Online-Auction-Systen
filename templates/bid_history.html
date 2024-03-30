@@ -19,7 +19,12 @@
             <tbody>
                 {% for bid in bid_history %}
                 <tr>
-                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">{{ bid.item_name }}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">
+                        <a href="{% url 'item' bid.item_id %}" style="text-decoration: none; color: black;">
+                            {{ bid.item_name }}
+                            <img src="{% static 'images/eye_logo.jpg' %}" alt="View Item" style="vertical-align: middle; margin-left: 5px; width: 30px; height: 15px; margin-bottom: 10px;">
+                        </a>                                              
+                    </td>                    
                     <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${{ bid.base_price }}</td>
                     <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${{ bid.my_bid }}</td>
                     <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${{ bid.highest_bid }}</td>

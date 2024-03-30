@@ -8,7 +8,7 @@
 {% block body %}
 {% if user.is_authenticated %}
 <div class="auction-reports">
-    <div style="max-width: 950px; margin: 0 auto; padding: 20px; border-radius: 5px; background-color: #fff; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+    <div style="max-width: 970px; margin: 0 auto; padding: 20px; border-radius: 5px; background-color: #fff; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
         <h1 style="text-align: center; margin-bottom: 20px; color: #333;">Auction Reports</h1>
         <table style="border-collapse: collapse; width: 100%;">
             <thead>
@@ -24,7 +24,12 @@
             <tbody>
                 {% for auction in completed_auctions %}
                 <tr style="background-color: #fff;">
-                    <td style="border: 1px solid #dddddd; padding: 8px;">{{ auction.name }}</td>
+                    <td style="border: 1px solid #dddddd; padding: 8px;">
+                        <a href="{% url 'item' auction.id %}" style="text-decoration: none; color:black">
+                            {{ auction.name }}
+                            <img src="{% static 'images/eye_logo.jpg' %}" alt="View Item" style="vertical-align: middle; margin-right: 5px; width: 30px; height: 15px; margin-bottom: 10px">
+                        </a>
+                    </td>
                     <td style="border: 1px solid #dddddd; padding: 8px;">{{ auction.description }}</td>
                     <td style="border: 1px solid #dddddd; padding: 8px;">${{ auction.base_price }}</td>
                     <td style="border: 1px solid #dddddd; padding: 8px;">${{ auction.highest_bid }}</td>

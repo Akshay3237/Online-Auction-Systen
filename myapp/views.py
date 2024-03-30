@@ -142,6 +142,7 @@ def bid_history(request):
             'my_bid': my_bid,
             'highest_bid': highest_bid,
             'status': status,
+            'item_id': auction.id
         })
 
     return render(request, 'bid_history.html', {'bid_history': bid_history})
