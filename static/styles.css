@@ -3,6 +3,8 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f2f2f2;
+    min-height: 100vh; /* Ensure body takes up at least the full viewport height */
+    position: relative;
     /* Changed to a lighter background color */
 }
 
@@ -17,7 +19,19 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Ensure it's above other content */
 }
+
+.content {
+    padding-top: 150px; /* Adjust the value based on the height of your header */
+    padding-bottom: 60px;
+}
+
+
 
 .search-bar {
     display: flex;
@@ -57,13 +71,11 @@ header {
 }
 
 footer {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     width: 100%;
     background-color: #346751;
-    /* Dark green color, same as header */
     color: #fff;
-    /* White text color */
     padding: 10px;
     text-align: center;
 }
