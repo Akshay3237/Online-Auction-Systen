@@ -1,42 +1,45 @@
 {% extends 'base.html' %}
 {% block title %}Bid History | BidBash{% endblock %}
 {% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'styles.css' %}">
+{% static 'script.js' %} {% endblock head %}
 
 {% block body %}
-    {% if user.is_authenticated %}
+  {% if user.is_authenticated %}
     <div style="max-width: 800px; margin: 0 auto; padding: 20px; background-color: #fff; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
-        <h1 style="text-align: center; margin-bottom: 20px; color: #333;">Bid History</h1>
-        <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd;">
-            <thead>
-                <tr>
-                    <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: left; background-color: #f2f2f2;">Item Name</th>
-                    <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center; background-color: #f2f2f2;">Base Price</th>
-                    <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center; background-color: #f2f2f2;">My Bid</th>
-                    <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center; background-color: #f2f2f2;">Highest Bid</th>
-                    <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center; background-color: #f2f2f2;">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for bid in bid_history %}
-                <tr>
-                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">
-                        <a href="{% url 'item' bid.item_id %}" style="text-decoration: none; color: black;">
-                            {{ bid.item_name }}
-                            <img src="{% static 'images/eye_logo.jpg' %}" alt="View Item" style="vertical-align: middle; margin-left: 5px; width: 30px; height: 15px; margin-bottom: 10px;">
-                        </a>                                              
-                    </td>                    
-                    <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${{ bid.base_price }}</td>
-                    <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${{ bid.my_bid }}</td>
-                    <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${{ bid.highest_bid }}</td>
-                    <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">{{ bid.status }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+      <h1 style="text-align: center; margin-bottom: 20px; color: #333;">Bid History</h1>
+      <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd;">
+        <thead>
+          <tr>
+            <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: left; background-color: #f2f2f2;">Item Name</th>
+            <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center; background-color: #f2f2f2;">Base Price</th>
+            <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center; background-color: #f2f2f2;">My Bid</th>
+            <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center; background-color: #f2f2f2;">Highest Bid</th>
+            <th style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center; background-color: #f2f2f2;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for bid in bid_history %}
+          <tr style="background-color: {% if bid.status == 'Won' %}green{% elif bid.status == 'Ongoing' %}yellow {% endif %}">
+            <td style="padding: 10px; border-bottom: 1px solid #ddd;">
+              <a href="{% url 'item' bid.item_id %}" style="text-decoration: none; color: black;">
+                {{ bid.item_name }}
+                <img src="{% static 'images/eye_logo.jpg' %}" alt="View Item" style="vertical-align: middle; margin-left: 5px; width: 30px; height: 15px; margin-bottom: 10px;">
+              </a>
+            </td>
+            <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${{ bid.base_price }}</td>
+            <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${{ bid.my_bid }}</td>
+            <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">${{ bid.highest_bid }}</td>
+            <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: center;">{{ bid.status }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-    {% else %}
-        <script type="text/javascript">
-            window.location.href = "{% url 'login' %}";
-        </script>
-    {% endif %}
+  {% else %}
+    <script type="text/javascript">
+      window.location.href = "{% url 'login' %}";
+    </script>
+  {% endif %}
 {% endblock %}
