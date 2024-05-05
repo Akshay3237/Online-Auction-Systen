@@ -21,7 +21,7 @@
         </thead>
         <tbody>
           {% for bid in bid_history %}
-          <tr style="background-color: {% if bid.status == 'Won' %}green{% elif bid.status == 'Ongoing' %}yellow {% endif %}">
+          <tr style="background-color: {% if bid.status == 'Won' %}#4CAF50{% elif bid.status == 'Ongoing' %}yellow {% endif %}">
             <td style="padding: 10px; border-bottom: 1px solid #ddd;">
               <a href="{% url 'item' bid.item_id %}" style="text-decoration: none; color: black;">
                 {{ bid.item_name }}
