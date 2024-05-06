@@ -60,7 +60,7 @@
                 timeLeftElement{{ forloop.counter }}.innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
                 if (distance < 0) {
                     clearInterval(x{{ forloop.counter }});
-                    timeLeftElement{{ forloop.counter }}.innerHTML = "Expired";
+                    timeLeftElement{{ forloop.counter }}.innerHTML = "Ended";
                 }
             }
         }, 10);

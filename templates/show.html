@@ -8,7 +8,7 @@
 {% block body %}
     {% if user.is_authenticated %}
                 <div class="product-showcase">
-                    <div class="product-images" style="position: relative; overflow: hidden;">
+                    <div class="product-images" style="position: relative; overflow: hidden; max-width:500px">
                         <div id="carousel" class="carousel" style="display: flex; transition: transform 10000s ease;">
                             {% for image in images %}
                             <div class="slide" style="flex: 0 0 auto; width: 100%;">
@@ -16,11 +16,10 @@
                             </div>
                             {% endfor %}
                             <button id="prevBtn" class="prev" onclick="moveSlide(-1)" style="position: absolute; top: 50%; left: 10px; transform: translateY(-50%); background-color: transparent; color: black; border: none; cursor: pointer; font-size: 24px; z-index: 1;">❮</button>
-                            <button id="nextBtn" class="next" onclick="moveSlide(1)" style="position: absolute; top: 50%; right: 77%; transform: translateY(-50%); background-color: transparent; color: black; border: none; cursor: pointer; font-size: 24px; z-index: 1;">❯</button>
+                            <button id="nextBtn" class="next" onclick="moveSlide(1)" style="position: absolute; top: 50%; left: calc(100% - 350px); transform: translateY(-50%); background-color: transparent; color: black; border: none; cursor: pointer; font-size: 24px; z-index: 1;">❯</button>
                         </div>
                     </div>
-                      
-                    </div>
+
                     <div class="product-details">
                         <h2 class="product-name">{{ item.name }}</h2>
                         <p class="description">{{ item.description }}</p>
@@ -40,8 +39,9 @@
                                     </form>
                                 </div>
                             {% endif %}
-                    </div>
+                     </div>
                 </div>
+            </div>
         {% endif %}
     {% else %}
         <script type="text/javascript">
