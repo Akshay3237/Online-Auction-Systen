@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Edit Auction | BidBash{% endblock %}
+
+{% block body %}
+{% if user.is_authenticated %}
+<div style="max-width: 400px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; text-align: center; position: relative;">
+    <form method="post" action="{% url 'edit_auction' auction.id %}" style="width: 100%; margin-bottom: 20px;">
+        <h1 style="font-size: 24px; margin-bottom: 20px;">Edit Auction
+            <button type="submit" style="position: absolute; top: 10px; right: 10px; padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Save</button>
+        </h1>
+        {% csrf_token %}
+        <label for="name">Auction Name:</label>
+        <input type="text" name="name" id="name" value="{{ auction.name }}" style="width: 100%; margin-bottom: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Auction Name" required>
+        <label for="description">Description:</label>
+        <textarea name="description" id="description" style="width: 100%; margin-bottom: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Description" required>{{ auction.description }}</textarea>
+        <label for="base_price">Base Price:</label>
+        <input type="number" name="base_price" id="base_price" value="{{ auction.base_price }}" style="width: 100%; margin-bottom: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Base Price" required>
+        <label for="start_time">Start Time:</label>
+        <input type="datetime-local" name="start_time" id="start_time" value="{{ auction.start_time|date:'Y-m-d\TH:i'  }}" style="width: 100%; margin-bottom: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Start Time" required>
+        <label for="end_time">End Time:</label>
+        <input type="datetime-local" name="end_time" id="end_time" value="{{ auction.end_time |date:'Y-m-d\TH:i' }}" style="width: 100%; margin-bottom: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="End Time" required>
+    </form>
+</div>
+{% else %}
+<script type="text/javascript">
+    window.location.href = "{% url 'login' %}";
+</script>
+{% endif %}
+{% endblock %}

@@ -18,4 +18,6 @@ urlpatterns = [
      path('see_more', views.see_more, name='see_more'),
      path('auction_reports', views.auction_reports, name='auction_reports'),
      path('search_products', views.search_products, name='search_products'),
+     path('edit_auction/<int:auction_id>/', views.edit_auction, name='edit_auction'),
+     path('end_auction/<int:auction_id>/', views.end_auction, name='end_auction'),
 ]

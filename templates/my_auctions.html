@@ -15,15 +15,34 @@
     <ul style="margin-top:20px; max-width: 500px; background-color: #fff; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
         {% for auction in user_auctions %}
             <a href="{% url 'item' auction.id %}" style="text-decoration: none; margin-top:20px;">
-                <li style="font-weight: bolder; font-size: x-large; list-style-type:decimal; color:#21618C">{{ auction.name }}</li>
+                <li style="font-weight: bolder; font-size: x-large; list-style-type:decimal; color:#21618C">{{ auction.name }}
+                    {% if auction.start_time > current_time %}
+                    <span style="padding:2px;padding-left:8px;padding-right:8px;margin:10px;font-size:15px;color:red;border: 1px solid black;border-radius:20px">Upcoming</span>
+                    {% else %}
+                        <span style="padding:2px;padding-left:8px;padding-right:8px;margin:10px;font-size:15px;color:red;border: 1px solid black;border-radius:20px">Live</span>
+                    {% endif %}
+                </li>
             </a>
-            <p><b style="font-size: larger;">Description :</b> {{ auction.description}}<br>
-            <b>Base Price : </b> {{ auction.base_price }} <br>
-            <b>Start Time : </b> {{ auction.start_time }} <br>
-            <b>End Time :</b>  {{ auction.end_time }} <br>
-        </p>
-            <br> <br> <br> 
-            {% endfor %}
+           
+            <p>
+                <b style="font-size: larger;">Description :</b> {{ auction.description}}<br>
+                <b>Base Price : </b> {{ auction.base_price }} <br>
+                <b>Start Time : </b> {{ auction.start_time }} <br>
+                <b>End Time :</b>  {{ auction.end_time }} <br>
+                {% if auction.start_time < current_time %}
+                {% comment %} <form method="POST" action="{% url 'end_auction' auction.id %}"> {% endcomment %}
+                <form method="POST" action="{% url 'end_auction' auction.id %}" style="text-decoration: none; margin-left:385px;">
+                    {% csrf_token %}
+                    <button type="submit">End Auction</button>
+                </form>
+                {% elif auction.start_time > current_time %}
+                    <a href="{% url 'edit_auction' auction.id %}" style="text-decoration: none; margin-left:385px;">
+                        <button>Edit Auction</button>
+                    </a>
+                {% endif %}
+            </p>
+         <br>
+        {% endfor %}
     </ul>
 {% else %}
     <p>You haven't organized any auctions yet.</p>

@@ -22,3 +22,8 @@ class ImageForm(forms.ModelForm):
     class Meta:
         model = Image
         fields = ['image']
+
+class EditAuctionForm(forms.ModelForm):
+    class Meta:
+        model = AuctionItem
+        fields = ['name', 'description', 'base_price', 'start_time', 'end_time']

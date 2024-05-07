@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
-from .forms import EditProfileForm, AuctionItemForm, ImageForm
+from .forms import EditProfileForm, AuctionItemForm, ImageForm,EditAuctionForm
 from .models import AuctionItem, Image, Bid
 from django.urls import reverse
 from django.utils import timezone
@@ -55,6 +55,7 @@ def my_auctions(request):
     context = {
         'user' : user,
         'user_auctions' : user_auctions,
+        'current_time' : current_time,
     }
     return render(request, 'my_auctions.html', context)
 
@@ -188,3 +189,21 @@ def search_products(request):
         results = None
         results_count = 0
     return render(request, 'search_results.html', {'results': results,'query':query,'results_count': results_count})
+
+def edit_auction(request, auction_id):
+    auction = AuctionItem.objects.get(id=auction_id)
+    if request.method == 'POST':
+        form = EditAuctionForm(request.POST, instance=auction)
+        if form.is_valid():
+            form.save()
+            return redirect('my_auctions')
+    else:
+        form = EditAuctionForm(instance=auction)
+    
+    return render(request, 'edit_auction.html', {'form': form, 'auction': auction})
+
+def end_auction(request, auction_id):
+    auction = AuctionItem.objects.get(id=auction_id)
+    auction.end_time = timezone.now()  # Update end time to current time
+    auction.save()
+    return redirect('my_auctions')
