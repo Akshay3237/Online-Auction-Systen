@@ -31,13 +31,20 @@
                             {% if current_time > item.end_time %}
                                 <p>Auction ended at : {{ item.end_time }}</p>
                             {% else %}
-                                <div class="bid-form">
-                                    <form method="post" action="{% url 'handle_bid' auction_id=item.id %}">
+                                {% if user == item.seller %}
+                                    <form method="post" action="{% url 'end_auction' item.id %}">
                                         {% csrf_token %}
-                                        <input type="number" name="bid_amount" placeholder="Enter your bid" required>
-                                        <button type="submit">Bid</button>
+                                        <button type="submit" class="end-auction-btn">End Auction</button>
                                     </form>
-                                </div>
+                                {% else %}
+                                    <div class="bid-form">
+                                        <form method="post" action="{% url 'handle_bid' auction_id=item.id %}">
+                                            {% csrf_token %}
+                                            <input type="number" name="bid_amount" placeholder="Enter your bid" required>
+                                            <button type="submit">Bid</button>
+                                        </form>
+                                    </div>
+                                {% endif %}
                             {% endif %}
                      </div>
                 </div>
