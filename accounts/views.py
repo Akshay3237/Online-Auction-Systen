@@ -12,7 +12,7 @@ def register(request):
             return redirect('login')
     else:
         form = CustomUserCreationForm()
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'UserSide/register.html', {'form': form})
 
 def login_view(request):  # Renamed login to login_view to avoid conflict with built-in login function
     if request.method == 'POST':
@@ -29,7 +29,7 @@ def login_view(request):  # Renamed login to login_view to avoid conflict with b
     else:
         form = LoginForm()
 
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'UserSide/login.html', {'form': form})
 
 def logout_view(request):
     logout(request)

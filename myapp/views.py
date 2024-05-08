@@ -25,16 +25,16 @@ def home(request):
         'main_user': username,
         'item_image_pairs': item_image_pairs,
     }
-    return render(request,'index.html',context)
+    return render(request,'UserSide/index.html',context)
 
 def item(request, item_id):
     item = get_object_or_404(AuctionItem, pk=item_id)
     images = Image.objects.filter(item=item)
     current_time = timezone.now()
-    return render(request, 'show.html', {'item': item, 'images': images, 'current_time': current_time})  # Pass images to the template
+    return render(request, 'UserSide/show.html', {'item': item, 'images': images, 'current_time': current_time})  # Pass images to the template
 
 def profile(request):
-    return render(request, 'profile.html')
+    return render(request, 'UserSide/profile.html')
 
 
 def edit_profile(request):
@@ -46,7 +46,7 @@ def edit_profile(request):
     else:
         form = EditProfileForm(instance=request.user)
     
-    return render(request, 'edit_profile.html', {'form': form})
+    return render(request, 'UserSide/edit_profile.html', {'form': form})
 
 def my_auctions(request):
     user = request.user
@@ -57,7 +57,7 @@ def my_auctions(request):
         'user_auctions' : user_auctions,
         'current_time' : current_time,
     }
-    return render(request, 'my_auctions.html', context)
+    return render(request, 'UserSide/my_auctions.html', context)
 
 def create_auction(request):
     if request.method == 'POST':
@@ -69,7 +69,7 @@ def create_auction(request):
             return redirect('add_image', auction_id=auction.pk)
     else:
         auction_form = AuctionItemForm()
-    return render(request, 'create_auction.html', {'auction_form': auction_form})
+    return render(request, 'UserSide/create_auction.html', {'auction_form': auction_form})
 
 ImageFormSet = formset_factory(ImageForm, extra=5)
 def add_image(request, auction_id):
@@ -89,7 +89,7 @@ def add_image(request, auction_id):
     else:
         formset = ImageFormSet(prefix='images')
 
-    return render(request, 'add_image.html', {'formset': formset})
+    return render(request, 'UserSide/add_image.html', {'formset': formset})
 
 def handle_bid(request, auction_id):
     if request.method == 'POST':
@@ -146,7 +146,7 @@ def bid_history(request):
             'item_id': auction.id
         })
 
-    return render(request, 'bid_history.html', {'bid_history': bid_history})
+    return render(request, 'UserSide/bid_history.html', {'bid_history': bid_history})
 
 
 def see_more(request):
@@ -160,7 +160,7 @@ def see_more(request):
     context = {
         'item_image_pairs': item_image_pairs,
     }
-    return render(request, 'see_more.html', context)
+    return render(request, 'UserSide/see_more.html', context)
 
 def auction_reports(request):
     completed_auctions = AuctionItem.objects.filter(
@@ -176,7 +176,7 @@ def auction_reports(request):
         auction.highest_bidder_username = highest_bidder.bidder.username if highest_bidder else None
         auction.highest_bidder_email = highest_bidder.bidder.email if highest_bidder else None
 
-    return render(request, 'auction_reports.html', {'completed_auctions': completed_auctions})
+    return render(request, 'UserSide/auction_reports.html', {'completed_auctions': completed_auctions})
 
 def search_products(request):
     query = request.GET.get('q')
@@ -188,7 +188,7 @@ def search_products(request):
     else:
         results = None
         results_count = 0
-    return render(request, 'search_results.html', {'results': results,'query':query,'results_count': results_count})
+    return render(request, 'UserSide/search_results.html', {'results': results,'query':query,'results_count': results_count})
 
 def edit_auction(request, auction_id):
     auction = AuctionItem.objects.get(id=auction_id)
@@ -200,7 +200,7 @@ def edit_auction(request, auction_id):
     else:
         form = EditAuctionForm(instance=auction)
     
-    return render(request, 'edit_auction.html', {'form': form, 'auction': auction})
+    return render(request, 'UserSide/edit_auction.html', {'form': form, 'auction': auction})
 
 def end_auction(request, auction_id):
     auction = AuctionItem.objects.get(id=auction_id)
