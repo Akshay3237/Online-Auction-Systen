@@ -17,9 +17,9 @@
             <a href="{% url 'item' auction.id %}" style="text-decoration: none; margin-top:20px;">
                 <li style="font-weight: bolder; font-size: x-large; list-style-type:decimal; color:#21618C">{{ auction.name }}
                     {% if auction.start_time > current_time %}
-                    <span style="padding:2px;padding-left:8px;padding-right:8px;margin:10px;font-size:15px;color:red;border: 1px solid black;border-radius:20px">Upcoming</span>
+                    <span style="padding:2px;padding-left:8px;padding-right:8px;margin:10px;font-size:15px;color:white;background-color:red;border-radius:20px">Upcoming</span>
                     {% else %}
-                        <span style="padding:2px;padding-left:8px;padding-right:8px;margin:10px;font-size:15px;color:red;border: 1px solid black;border-radius:20px">Live</span>
+                        <span style="padding:2px;padding-left:8px;padding-right:8px;margin:10px;font-size:15px;background-color:red;color:white;border-radius:20px">Live</span>
                     {% endif %}
                 </li>
             </a>
@@ -45,7 +45,7 @@
         {% endfor %}
     </ul>
 {% else %}
-    <p>You haven't organized any auctions yet.</p>
+    <p>Currently you don't have any running or upcoming auctions</p>
 {% endif %}
 </div>
 {% endblock %}

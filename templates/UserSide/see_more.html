@@ -6,15 +6,24 @@
 
 {% block body %}
 {% if user.is_authenticated %}
+<div style="margin-bottom: 20px; text-align: center;">
+    <label for="status-filter" style="margin-right: 10px;">Filter by status:</label>
+    <select id="status-filter" onchange="filterItems(this.value)" style="padding: 8px 12px; border-radius: 5px; border: 1px solid #ddd; background-color: #fff; color: #333; font-size: 16px; cursor: pointer; transition: border-color 0.3s ease;">
+        <option value="all">All</option>
+        <option value="running">Running</option>
+        <option value="ended">Ended</option>
+        <option value="upcoming">Upcoming</option>
+    </select>
+</div>
 
 <div class="product-container">
     {% for item, img in item_image_pairs %}
-    <a href="{% url 'item' item.id %}" class="product-div">
+    <a href="{% url 'item' item.id %}" class="product-div" id="product-{{ item.id }}" style="display: block;">
         <div class="product" style="position: relative;">
             <div class="time-left-{{ item.id }}" style="position: absolute; top: 10px; left: 10px; color: white; background-color: #4CAF50; padding: 5px; border-radius: 8px; font-family: Arial, sans-serif; font-size: 14px;"></div>
 
-            <img src="{{ img.image.url }}" alt="{{ item.name }}">
-            <div class="product-details">
+            <img src="{{ img.image.url }}" alt="{{ item.name }}" id="image-{{ item.id }}">
+            <div class="product-details" id="details-{{ item.id }}">
                 <p class="product-name">{{ item.name }}</p>
                 <!-- Ensure that base_price is a field in the AuctionItem model -->
                 <p class="base-price">{{ item.base_price }}</p>
@@ -24,35 +33,86 @@
     </a>
     <script>
         var startTime_{{ item.id }} = new Date('{{ item.start_time|date:"Y-m-d H:i:s" }}').getTime();
-var endTime_{{ item.id }} = new Date('{{ item.end_time|date:"Y-m-d H:i:s" }}').getTime();
-var x_{{ item.id }} = setInterval(function() {
-    var now = new Date().getTime();
+        var endTime_{{ item.id }} = new Date('{{ item.end_time|date:"Y-m-d H:i:s" }}').getTime();
+        var x_{{ item.id }} = setInterval(function() {
+            var now = new Date().getTime();
 
-    if (now < startTime_{{ item.id }}) {
-        document.querySelector('.time-left-{{ item.id }}').innerHTML = "Not Started Yet";
-        return;
-    }
+            if (now < startTime_{{ item.id }}) {
+                document.querySelector('.time-left-{{ item.id }}').innerHTML = "Not Started Yet";
+                return;
+            }
 
-    var distance = endTime_{{ item.id }} - now;
+            var distance = endTime_{{ item.id }} - now;
 
-    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-    if (distance < 0) {
-        clearInterval(x_{{ item.id }});
-        document.querySelector('.time-left-{{ item.id }}').innerHTML = "Ended";
-    } else {
-        document.querySelector('.time-left-{{ item.id }}').innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-    }
-}, 10); 
+            if (distance < 0) {
+                clearInterval(x_{{ item.id }});
+                document.querySelector('.time-left-{{ item.id }}').innerHTML = "Ended";
+            } else {
+                document.querySelector('.time-left-{{ item.id }}').innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+            }
+        }, 10);
 
     </script>
     {% endfor %}
 </div>
 
+<script>
+    function filterItems(filter) {
+        var items = document.querySelectorAll('.product-div');
 
+        items.forEach(function(item) {
+            var itemId = item.id.split('-')[1]; // Extract item ID from product div ID
+            var timeLeft = document.querySelector('.time-left-' + itemId).innerHTML.trim();
+            var image = document.getElementById('image-' + itemId);
+            var details = document.getElementById('details-' + itemId);
+            switch (filter) {
+                case 'all':
+                    item.style.display = 'block';
+                    image.style.opacity = '1';
+                    details.style.opacity = '1';
+                    break;
+                case 'running':
+                    if (!(timeLeft.includes('Ended') || timeLeft.includes('Not Started Yet'))) {
+                        item.style.display = 'block';
+                        image.style.opacity = '1';
+                        details.style.opacity = '1';
+                    } else {
+                        item.style.display = 'block';
+                        image.style.opacity = '0.5';
+                        details.style.opacity = '0.5';
+                    }
+                    break;
+                case 'ended':
+                    if (timeLeft.includes('Ended')) {
+                        item.style.display = 'block';
+                        image.style.opacity = '1';
+                        details.style.opacity = '1';
+                    } else {
+                        item.style.display = 'block';
+                        image.style.opacity = '0.5';
+                        details.style.opacity = '0.5';
+                    }
+                    break;
+                case 'upcoming':
+                    if (timeLeft.includes('Not Started Yet')) {
+                        item.style.display = 'block';
+                        image.style.opacity = '1';
+                        details.style.opacity = '1';
+                    } else {
+                        item.style.display = 'block';
+                        image.style.opacity = '0.5';
+                        details.style.opacity = '0.5';
+                    }
+                    break;
+            }
+        });
+    }
+</script>
 
 {% else %}
 <script type="text/javascript">
@@ -60,5 +120,4 @@ var x_{{ item.id }} = setInterval(function() {
 </script>
 </html>
 {% endif %}
-
 {% endblock body %}
